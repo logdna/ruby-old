@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe LogdnaRuby do
+describe Logdna do
   it "has a version number" do
-    expect(LogdnaRuby::VERSION).not_to be nil
+    expect(Logdna::VERSION).not_to be nil
   end
 
   it "does something useful" do

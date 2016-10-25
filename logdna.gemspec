@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'logdna_ruby/version'
+require 'logdna/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'logdna_ruby'
-  spec.version       = LogdnaRuby::VERSION
+  spec.name          = 'logdna'
+  spec.version       = Logdna::VERSION
   spec.authors       = ['edwin-lai']
   spec.email         = ['edwinlai@ucla.edu']
 
