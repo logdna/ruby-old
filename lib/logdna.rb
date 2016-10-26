@@ -22,7 +22,7 @@ module LogDNA
     super
     return true if severity < @level
     message ||= yield
-    post_to_logdna(message, severity, progname) if @open
+    push_to_buffer(message, severity, progname) if @open
   end
 
   def close_http
@@ -54,20 +54,25 @@ module LogDNA
     @host = hostname.to_s
     @mac = opts[:mac].to_s
     @ip = opts[:ip].to_s
+    @buffer = []
+    @buffer_max = opts[:buffer_max_size] || 10
+    @freq = opts[:buffer_timeout] || 10
+    @last_posted = Time.now
     @open = true
   end
 
-  def post_to_logdna(message, level = nil, source = 'none')
+  def post
+    @last_posted = Time.now
     res = @conn.headers(apikey: @api_key, 'Content-Type' => 'application/json')
                .post("/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}",
-                     json: request_body(message, level, source))
+                     json: { e: 'ls', ls: @buffer })
     res.flush
   end
 
-  def request_body(message, level, source)
-    body = { e: 'line', line: message, timestamp: Time.now.to_i }
-    body[:level] = LEVELS[level] if level
-    body[:app] = source if source
-    body
+  def push_to_buffer(message, level = nil, source = 'none')
+    line = { line: message, app: source, timestamp: Time.now.to_i }
+    line[:level] = LEVELS[level] if level
+    @buffer << line
+    post if @buffer.size > @buffer_max || Time.now - @last_posted > @freq
   end
 end

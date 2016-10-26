@@ -46,6 +46,8 @@ Options:
 * logdev: The log device. This is a filename (String) or IO object (e.g. STDOUT, STDERR, an open file). Default: STDOUT.
 * shift_age: Number of old log files to keep, or frequency of rotation (daily, weekly, or monthly). Default: 7.
 * shift_size: Maximum logfile size (only applies when shift_age is a number). Default: 1,048,576
+* buffer_max_size: Maximum number of lines in buffer.
+* buffer_timeout: Frequency of posting requests to LogDNA.
 * mac: MAC address. Default: nil.
 * ip: IP address. Default: nil.
 

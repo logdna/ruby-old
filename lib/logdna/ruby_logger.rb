@@ -14,7 +14,7 @@ module LogDNA
 
     def <<(msg)
       super
-      post_to_logdna(msg)
+      push_to_buffer(msg)
     end
   end
 end
