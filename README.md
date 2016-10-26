@@ -1,5 +1,3 @@
-# The Official LogDNA Ruby Gem!
-
 <p align="center">
   <a href="https://app.logdna.com">
     <img height="95" width="201" src="https://raw.githubusercontent.com/logdna/artwork/master/logo%2Bruby.png">
