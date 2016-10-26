@@ -1,11 +1,21 @@
 require 'json'
-require 'logdna_ruby/version'
+require_relative './logdna/version'
 
 module LogDNA
-  @log_domain = 'http://logs.logdna.com'
+  INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
+
+  LEVELS = {
+    0 => 'DEBUG',
+    1 => 'INFO',
+    2 => 'WARN',
+    3 => 'ERROR',
+    4 => 'FATAL',
+    5 => 'UNKNOWN'
+  }.freeze
 
   def add(severity, message = nil, progname = nil)
     super
+    message ||= yield
     post_to_logdna(message, severity, progname)
   end
 
@@ -15,7 +25,7 @@ module LogDNA
     # defaults from ruby standard library logger documentation
     opts[:logdev] ||= STDOUT
     opts[:shift_age] ||= 7
-    opts[:shift_size] || 1_048_576
+    opts[:shift_size] ||= 1_048_576
     opts
   end
 
@@ -24,21 +34,22 @@ module LogDNA
     @host = hostname
     @mac = opts[:mac]
     @ip = opts[:ip]
+    @logdev = opts[:logdev]
   end
 
-  def post_to_logdna(message, level = nil, app = nil)
-    @conn.post do |req|
-      req.url 'logs/ingest', hostname: @host, mac: @mac, ip: @ip, now: Time.now
-      req[:apikey] = @api_key
-      req['content-type'] = 'application/json'
-      req.body = request_body(message, level, app)
-    end
+  def post_to_logdna(message, level = nil, source = 'none')
+    res = @conn.headers(apikey: @api_key, 'Content-Type' => 'application/json')
+               .post("/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}",
+                     json: request_body(message, level, source))
+
+    puts JSON.generate(request_body(message, level, source))
+    puts res.to_s
   end
 
-  def request_body(message, level, app)
-    body = { message: message, timestamp: Time.now }
-    body[:level] = level if level
-    body[:app] = app if app
-    JSON.generate(body)
+  def request_body(message, level, source)
+    body = { e: 'line', line: message, timestamp: Time.now }
+    body[:level] = LEVELS[level] if level
+    body[:app] = source if source
+    body
   end
 end
