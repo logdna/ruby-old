@@ -7,7 +7,7 @@
   <p align="center">Ruby library for logging to <a href="https://app.logdna.com">LogDNA</a></p>
 </p>
 
-* **[Overview](#overview)
+* **[Overview](#overview)**
 * **[Installation](#installation)**
 * **[API](#api)**
 * **[Development](#development)**
@@ -51,7 +51,7 @@ Options:
 
 #### \#add
 
-Log a message if the given severity is high enough. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal, as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message.
+Log a message if the given severity is high enough and post it to the LogDNA ingester. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal (which all call \#add), as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message.
 
 #### \#close
 
@@ -60,6 +60,12 @@ Close the logging device and the HTTP connection to LogDNA's ingester.
 #### \#reopen(logdev)
 
 Reopen the logging device and open another HTTP connection to LogDNA's ingester.
+
+### Only in LogDNA::RubyLogger
+
+#### \#<<(message)
+
+Dump given message to the log device without any formatting, then posts it to the LogDNA ingester. If no log device exists, return nil.
 
 ## Development
 

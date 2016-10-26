@@ -15,6 +15,7 @@ module LogDNA
 
   def add(severity, message = nil, progname = nil)
     super
+    return true if severity < @level
     message ||= yield
     post_to_logdna(message, severity, progname)
   end
