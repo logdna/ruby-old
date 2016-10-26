@@ -1,5 +1,19 @@
 # The Official LogDNA Ruby Gem!
 
+<p align="center">
+  <a href="https://app.logdna.com">
+    <img height="95" width="201" src="https://raw.githubusercontent.com/logdna/artwork/master/logo%2Bruby.png">
+  </a>
+  <p align="center">Ruby library for logging to <a href="https://app.logdna.com">LogDNA</a></p>
+</p>
+
+* **[Overview](#overview)
+* **[Installation](#installation)**
+* **[API](#api)**
+* **[Development](#development)**
+* **[Contributing](#contributing)**
+* **[License](#license)**
+
 ## Overview
 
 This gem contains LogDNA::RubyLogger, an extension to the logger from Ruby's standard library, as well as LogDNA::RailsLogger, which inherits from ActiveSupport::Logger from Rails. ActiveSupport is not formally listed as a dependency for this gem because the RubyLogger can be used without it, but you are warned that **LogDNA::RailsLogger depends on ActiveSupport**. Of course, this shouldn't be an issue as long as you're using the RailsLogger only with Rails projects, since ActiveSupport is (obviously) a dependency of Rails.
