@@ -1,11 +1,7 @@
-require "spec_helper"
+require 'spec_helper'
 
-describe Logdna do
-  it "has a version number" do
-    expect(Logdna::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(false).to eq(true)
+describe LogDNA do
+  it 'has a version number' do
+    expect(LogDNA::VERSION).not_to be nil
   end
 end

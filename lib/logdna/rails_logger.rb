@@ -12,15 +12,5 @@ module LogDNA
       super(opts[:logdev], opts[:shift_age], opts[:shift_size])
       set_ivars(api_key, hostname, options)
     end
-
-    def close
-      super
-      @conn.close
-    end
-
-    def reopen(logdev = nil)
-      super
-      @conn = HTTP.persistent LogDNA::INGESTER_DOMAIN
-    end
   end
 end

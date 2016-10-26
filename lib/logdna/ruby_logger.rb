@@ -17,15 +17,5 @@ module LogDNA
       super
       post_to_logdna(msg)
     end
-
-    def close
-      super
-      @conn.close
-    end
-
-    def reopen(logdev = nil)
-      super
-      @conn = HTTP.persistent LogDNA::INGESTER_DOMAIN
-    end
   end
 end
