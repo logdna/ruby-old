@@ -16,7 +16,7 @@
 
 # Overview
 
-This gem contains LogDNA::RubyLogger, an extension to the logger from Ruby's standard library, as well as LogDNA::RailsLogger, which inherits from ActiveSupport::Logger from Rails. ActiveSupport is not formally listed as a dependency for this gem because the RubyLogger can be used without it, but you are warned that **LogDNA::RailsLogger depends on ActiveSupport**. Of course, this shouldn't be an issue as long as you're using the RailsLogger only with Rails projects, since ActiveSupport is (obviously) a dependency of Rails.
+This gem contains LogDNA::RubyLogger, an extension to the logger from Ruby's standard library, as well as LogDNA::RailsLogger, which inherits from ActiveSupport::Logger from Rails. LogDNA::RailsLogger is only loaded if ActiveSupport is present.
 
 # Installation
 
@@ -51,7 +51,7 @@ Options:
 
 ### \#add
 
-Log a message if the given severity is high enough and post it to the LogDNA ingester. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal (which all call \#add), as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message.
+Log a message if the given severity is high enough and post it to the LogDNA ingester. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal (which all call \#add), as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message. It returns the http response.
 
 ### \#close_http
 

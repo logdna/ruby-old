@@ -1,2 +1,3 @@
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
-require "logdna_ruby"
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+require 'logdna'
+require 'webmock/rspec'

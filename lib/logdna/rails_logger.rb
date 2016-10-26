@@ -1,6 +1,5 @@
 require 'active_support/logger'
 require 'http'
-require_relative '../logdna.rb'
 
 module LogDNA
   class RailsLogger < ActiveSupport::Logger

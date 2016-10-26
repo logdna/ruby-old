@@ -1,3 +1,3 @@
-module Logdna
-  VERSION = "0.0.0"
+module LogDNA
+  VERSION = "0.0.1"
 end
