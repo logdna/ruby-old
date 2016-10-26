@@ -16,7 +16,7 @@
 
 # Overview
 
-This gem contains LogDNA::RubyLogger, an extension to the logger from Ruby's standard library, as well as LogDNA::RailsLogger, which inherits from ActiveSupport::Logger from Rails. LogDNA::RailsLogger is only loaded if ActiveSupport is present.
+This gem contains LogDNA::RubyLogger, an extension to the logger from Ruby's standard library.
 
 # Installation
 
@@ -36,9 +36,7 @@ Or install it yourself as:
 
 # API
 
-## Shared by LogDNA::RubyLogger and LogDNA::RailsLogger
-
-### ::new(api_key, hostname, options = {})
+## ::new(api_key, hostname, options = {})
 
 Instantiates a new instance of the class it is called on. api_key and hostname are required.
 
@@ -51,21 +49,19 @@ Options:
 * mac: MAC address. Default: nil.
 * ip: IP address. Default: nil.
 
-### \#add
+## \#add
 
 Log a message if the given severity is high enough and post it to the LogDNA ingester. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal (which all call \#add), as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message. It returns the http response.
 
-### \#close_http
+## \#close_http
 
 Close the HTTP connection to LogDNA's ingester.
 
-### \#reopen_http
+## \#reopen_http
 
 Open another HTTP connection to LogDNA's ingester if the connection is alread closed.
 
-## Only in LogDNA::RubyLogger
-
-### \#<<(message)
+## \#<<(message)
 
 Dump given message to the log device without any formatting, then posts it to the LogDNA ingester. If no log device exists, return nil.
 
@@ -75,7 +71,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 # Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/logdna/logdna_ruby.
+Bug reports and pull requests are welcome on GitHub at https://github.com/logdna/ruby.
 
 # License
 

@@ -1,10 +1,6 @@
 require 'json'
 require_relative './logdna/version.rb'
 require_relative './logdna/ruby_logger.rb'
-begin
-  require_relative './logdna/rails_logger.rb'
-rescue
-end
 
 module LogDNA
   INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze

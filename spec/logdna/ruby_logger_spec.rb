@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'webmock'
-require 'http'
 
 describe LogDNA::RubyLogger do
   valid_api_key = 'x' * 32
