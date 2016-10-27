@@ -24,6 +24,7 @@ module LogDNA
   def close_http
     return false unless @open
     @conn.close
+    @timer.exit if @timer
     @open = false
     true
   end
@@ -53,22 +54,37 @@ module LogDNA
     @buffer = []
     @buffer_max = opts[:buffer_max_size] || 10
     @freq = opts[:buffer_timeout] || 10
-    @last_posted = Time.now
     @open = true
   end
 
   def post
-    @last_posted = Time.now
     res = @conn.headers(apikey: @api_key, 'Content-Type' => 'application/json')
                .post("/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}",
                      json: { e: 'ls', ls: @buffer })
+    @buffer = []
     res.flush
   end
 
   def push_to_buffer(message, level = nil, source = 'none')
     line = { line: message, app: source, timestamp: Time.now.to_i }
     line[:level] = LEVELS[level] if level
+    start_timer if @buffer.empty?
     @buffer << line
-    post if @buffer.size > @buffer_max || Time.now - @last_posted > @freq
+    return if @buffer.size < @buffer_max
+    @timer.exit
+    post
+  end
+
+  def start_timer
+    @timer = Thread.new do
+      sleep @freq
+      unless @buffer.empty?
+        res = @conn.headers(apikey: @api_key, 'Content-Type' => 'application/json')
+                   .post("/logs/ingest?hostname=#{@host}&mac=#{@mac}&ip=#{@ip}",
+                         json: { e: 'ls', ls: @buffer })
+        @buffer = []
+        res.flush
+      end
+    end
   end
 end
