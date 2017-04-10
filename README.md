@@ -34,6 +34,38 @@ Or install it yourself as:
 
     $ gem install logdna
 
+# Quick Setup
+
+After installation, call
+
+    logger = LogDNA::RubyLogger.new(your_api_key, hostname)
+
+to set up the logger.
+
+To send logs, use exactly like the logger from the Ruby standard library. For example:
+
+    require 'logdna'
+
+    logger = LogDNA::RubyLogger.new(your_api_key, hostname)
+    logger.level = Logger::WARN
+
+    logger.debug("Created logger")
+    logger.info("Program started")
+    logger.warn("Nothing to do!")
+
+    path = "a_non_existent_file"
+
+    begin
+      File.foreach(path) do |line|
+        unless line =~ /^(\w+) = (.*)$/
+          logger.error("Line in wrong format: #{line.chomp}")
+        end
+      end
+    rescue => err
+      logger.fatal("Caught exception; exiting")
+      logger.fatal(err)
+    end
+
 # API
 
 ## ::new(api_key, hostname, options = {})
@@ -59,7 +91,7 @@ Close the HTTP connection to LogDNA's ingester.
 
 ## \#reopen_http
 
-Open another HTTP connection to LogDNA's ingester if the connection is alread closed.
+Open another HTTP connection to LogDNA's ingester if the connection is already closed.
 
 ## \#<<(message)
 
