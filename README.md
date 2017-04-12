@@ -81,7 +81,7 @@ Options:
 
 __Make sure that the following options are numbers if you supply them. We are not responsible for any type errors if you enter non-numerical values for these options.__
 
-* shift_age: Number of old log files to keep, or frequency of rotation (daily, weekly, or monthly). Default: 7.
+* shift_age: Number of old log files to keep, or frequency of rotation (daily, weekly, or monthly). Default: 7
 * shift_size: Maximum logfile size (only applies when shift_age is a number). Default: 1,048,576
 * buffer_max_size: Maximum number of lines in buffer. Default: 10
 * buffer_timeout: Frequency of posting requests to LogDNA. Default: 10 (seconds)
