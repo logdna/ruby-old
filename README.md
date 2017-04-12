@@ -88,7 +88,7 @@ __Make sure that the following options are numbers if you supply them. We are no
 
 ## \#add(severity, message=nil, progname=nil) {...}
 
-Log a message if the given severity is high enough and post it to the LogDNA ingester. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal (which all call \#add), as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message. It returns the http response.
+Log a message if the given severity is high enough and post it to the LogDNA ingester. This is the generic logging method. Users will be more inclined to use debug, info, warn, error, and fatal (which all call \#add), as [described in the Ruby Logger documentation](https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html). Note that these methods take a source as the argument and a block which returns a message, or a string/exception as an argument without a block. It returns the http response.
 
 ## \#close_http
 

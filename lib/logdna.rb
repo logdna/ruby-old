@@ -17,8 +17,12 @@ module LogDNA
   def add(severity, message = nil, progname = nil)
     super
     return true if severity < @level
-    message ||= yield
-    push_to_buffer(message, severity, progname) if @open
+    # Ruby Logger's author is a maniac.
+    # The reassignment in the library is gratuitous.
+    message ||= yield if block_given?
+    message, progname = progname, message unless message && block_given?
+    return unless @open
+    push_to_buffer(message, severity, progname)
   end
 
   def close_http
