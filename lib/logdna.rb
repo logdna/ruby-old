@@ -35,6 +35,14 @@ module LogDNA
     @open = true
   end
 
+  def environment
+    @default_app
+  end
+
+  def environment=(env)
+    @default_app = env
+  end
+
   private
 
   def fill_opts_with_defaults(opts)
@@ -42,6 +50,10 @@ module LogDNA
     opts[:logdev] ||= STDOUT
     opts[:shift_age] ||= 7
     opts[:shift_size] ||= 1_048_576
+    opts[:environment] ||= nil # alias for :default_app
+    opts[:default_app] ||= opts[:environment]
+    opts[:buffer_max_size] ||= 10
+    opts[:buffer_timeout] ||= 10
     opts
   end
 
@@ -51,9 +63,10 @@ module LogDNA
     @host = hostname.to_s
     @mac = opts[:mac].to_s
     @ip = opts[:ip].to_s
+    @default_app = opts[:default_app] || 'none'
     @buffer = []
-    @buffer_max = opts[:buffer_max_size] || 10
-    @freq = opts[:buffer_timeout] || 10
+    @buffer_max = opts[:buffer_max_size]
+    @freq = opts[:buffer_timeout]
     @open = true
   end
 
@@ -65,8 +78,9 @@ module LogDNA
     res.flush
   end
 
-  def push_to_buffer(message, level = nil, source = 'none')
-    line = { line: message, app: source, timestamp: Time.now.to_i }
+  def push_to_buffer(message, level = nil, source = nil)
+    app = source || @default_app
+    line = { line: message, app: app, timestamp: Time.now.to_i }
     line[:level] = LEVELS[level] if level
     start_timer if @buffer.empty?
     @buffer << line

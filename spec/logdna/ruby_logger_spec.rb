@@ -6,11 +6,15 @@ describe LogDNA::RubyLogger do
 
   before(:example) do
     WebMock.stub_request(:post, 'https://logs.logdna.com/logs/ingest?hostname=test_host&ip=&mac=')
-    @logger = LogDNA::RubyLogger.new(valid_api_key, 'test_host', logdev: StringIO.new)
+    @logger = LogDNA::RubyLogger.new(valid_api_key,
+                                     'test_host',
+                                     logdev: StringIO.new,
+                                     default_app: 'default_app')
   end
 
   it 'posts data to the API endpoint' do
-    9.times { @logger.add(5, nil, 'test_app') { 'test_message' } } # 10th line triggers post from buffer
+    9.times { @logger.add(5, nil, 'test_app') { 'test_message' } }
+    # 10th line triggers post from buffer
     res = @logger.add(5, nil, 'test_app') { 'test_message' }
     expect(res.code).to be 200
   end
@@ -53,5 +57,28 @@ describe LogDNA::RubyLogger do
     9.times { @logger << 'test_message' }
     res = @logger << 'test_message'
     expect(res.code).to be 200
+  end
+
+  it 'supports setting of default app' do
+    expect(@logger.default_app).to eq 'default_app'
+  end
+
+  it 'supports environment alias for default_app' do
+    expect(@logger.environment).to eq @logger.default_app
+  end
+
+  it 'supports setting and getting of log attributes after instantiation' do
+    @logger.api_key = 'new_api_key'
+    expect(@logger.api_key).to eq 'new_api_key'
+    @logger.host = 'new_host'
+    expect(@logger.host).to eq 'new_host'
+    @logger.default_app = 'new_app'
+    expect(@logger.default_app).to eq 'new_app'
+    @logger.environment = 'environment'
+    expect(@logger.environment).to eq 'environment'
+    @logger.ip = '1.2.3.4'
+    expect(@logger.ip).to eq '1.2.3.4'
+    @logger.mac = 'C0:FF:EE:C0:FF:EE'
+    expect(@logger.mac). to eq 'C0:FF:EE:C0:FF:EE'
   end
 end
