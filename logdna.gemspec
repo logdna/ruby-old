@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'edwin@logdna.com'
 
   spec.summary       = 'LogDNA extension to ruby logger'
-  spec.homepage      = 'https://github.com/logdna/logdna_ruby'
+  spec.homepage      = 'https://github.com/logdna/ruby'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

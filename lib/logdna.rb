@@ -84,6 +84,11 @@ module LogDNA
 
   def push_to_buffer(message, level = nil, source = nil)
     app = source || @default_app
+    begin
+      message.encode("UTF-8")
+    rescue Encoding::UndefinedConversionError
+      message = message.force_encoding("UTF-8")
+    end
     line = { line: message, app: app, timestamp: Time.now.to_i }
     line[:level] = LEVELS[level] if level
     start_timer if @buffer.empty?
