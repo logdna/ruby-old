@@ -1,6 +1,24 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
 require 'json'
 require_relative './logdna/version.rb'
 require_relative './logdna/ruby_logger.rb'
+
+class Hash
+  def to_utf8
+    Hash[
+      self.collect do |k, v|
+        if (v.respond_to?(:to_utf8))
+          [ k, v.to_utf8 ]
+        elsif (v.respond_to?(:encoding))
+          [ k, v.dup.encode('UTF-8') ]
+        else
+          [ k, v ]
+        end
+      end
+    ]
+  end
+end
 
 module LogDNA
   INGESTER_DOMAIN = 'https://logs.logdna.com'.freeze
@@ -84,10 +102,18 @@ module LogDNA
 
   def push_to_buffer(message, level = nil, source = nil)
     app = source || @default_app
-    begin
-      message.encode("UTF-8")
-    rescue Encoding::UndefinedConversionError
-      message = message.force_encoding("UTF-8")
+    if message
+        if message.class == Hash
+            message = message.to_utf8
+        else
+            begin
+              message.encode("UTF-8")
+            rescue Encoding::UndefinedConversionError
+              message = message.force_encoding("UTF-8")
+            end
+        end
+    else
+        message = ''
     end
     line = { line: message, app: app, timestamp: Time.now.to_i }
     line[:level] = LEVELS[level] if level
